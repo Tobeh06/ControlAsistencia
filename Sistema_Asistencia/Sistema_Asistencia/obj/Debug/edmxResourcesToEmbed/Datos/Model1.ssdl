@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ControlAsistenciaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Asistencias">
+    <Key>
+      <PropertyRef Name="id_asistencia" />
+    </Key>
+    <Property Name="id_asistencia" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fecha" Type="date" />
+    <Property Name="hora" Type="time" Precision="7" />
+    <Property Name="minutos_retraso" Type="int" />
+    <Property Name="justificacion" Type="bit" Nullable="false" />
+    <Property Name="observacion" Type="varchar" MaxLength="100" />
+    <Property Name="id_docente" Type="int" />
+    <Property Name="id_grupo" Type="int" />
+  </EntityType>
+  <EntityType Name="Docentes">
+    <Key>
+      <PropertyRef Name="id_docente" />
+    </Key>
+    <Property Name="id_docente" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombre" Type="varchar" MaxLength="50" />
+    <Property Name="apellido" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Grupos">
+    <Key>
+      <PropertyRef Name="id_grupo" />
+    </Key>
+    <Property Name="id_grupo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombre" Type="varchar" MaxLength="50" />
+    <Property Name="estudiantes_matriculados" Type="int" />
+    <Property Name="turno" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="id_docente" Type="int" />
+  </EntityType>
+  <EntityType Name="Sueldos">
+    <Key>
+      <PropertyRef Name="id_sueldos" />
+    </Key>
+    <Property Name="id_sueldos" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="id_docente" Type="int" Nullable="false" />
+    <Property Name="gestion" Type="int" Nullable="false" />
+    <Property Name="mes" Type="int" Nullable="false" />
+    <Property Name="haber_basico" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+    <Property Name="descuento" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+    <Property Name="liquido_pagable" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Usuarios">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombre" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="usuario" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="password" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="email" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="rol" Type="varchar" MaxLength="1" Nullable="false" />
+  </EntityType>
+  <Association Name="FK__Asistenci__id_do__5DCAEF64">
+    <End Role="Docentes" Type="Self.Docentes" Multiplicity="0..1" />
+    <End Role="Asistencias" Type="Self.Asistencias" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Docentes">
+        <PropertyRef Name="id_docente" />
+      </Principal>
+      <Dependent Role="Asistencias">
+        <PropertyRef Name="id_docente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Asistenci__id_gr__5EBF139D">
+    <End Role="Grupos" Type="Self.Grupos" Multiplicity="0..1" />
+    <End Role="Asistencias" Type="Self.Asistencias" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Grupos">
+        <PropertyRef Name="id_grupo" />
+      </Principal>
+      <Dependent Role="Asistencias">
+        <PropertyRef Name="id_grupo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Grupos__id_docen__5AEE82B9">
+    <End Role="Docentes" Type="Self.Docentes" Multiplicity="0..1" />
+    <End Role="Grupos" Type="Self.Grupos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Docentes">
+        <PropertyRef Name="id_docente" />
+      </Principal>
+      <Dependent Role="Grupos">
+        <PropertyRef Name="id_docente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Sueldos__id_doce__619B8048">
+    <End Role="Docentes" Type="Self.Docentes" Multiplicity="1" />
+    <End Role="Sueldos" Type="Self.Sueldos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Docentes">
+        <PropertyRef Name="id_docente" />
+      </Principal>
+      <Dependent Role="Sueldos">
+        <PropertyRef Name="id_docente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ControlAsistenciaModelStoreContainer">
+    <EntitySet Name="Asistencias" EntityType="Self.Asistencias" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Docentes" EntityType="Self.Docentes" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Grupos" EntityType="Self.Grupos" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Sueldos" EntityType="Self.Sueldos" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Usuarios" EntityType="Self.Usuarios" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__Asistenci__id_do__5DCAEF64" Association="Self.FK__Asistenci__id_do__5DCAEF64">
+      <End Role="Docentes" EntitySet="Docentes" />
+      <End Role="Asistencias" EntitySet="Asistencias" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Asistenci__id_gr__5EBF139D" Association="Self.FK__Asistenci__id_gr__5EBF139D">
+      <End Role="Grupos" EntitySet="Grupos" />
+      <End Role="Asistencias" EntitySet="Asistencias" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Grupos__id_docen__5AEE82B9" Association="Self.FK__Grupos__id_docen__5AEE82B9">
+      <End Role="Docentes" EntitySet="Docentes" />
+      <End Role="Grupos" EntitySet="Grupos" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Sueldos__id_doce__619B8048" Association="Self.FK__Sueldos__id_doce__619B8048">
+      <End Role="Docentes" EntitySet="Docentes" />
+      <End Role="Sueldos" EntitySet="Sueldos" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

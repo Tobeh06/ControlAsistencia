@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ControlAsistenciaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Asistencias">
+    <Key>
+      <PropertyRef Name="id_asistencia" />
+    </Key>
+    <Property Name="id_asistencia" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fecha" Type="DateTime" Precision="0" />
+    <Property Name="hora" Type="Time" Precision="7" />
+    <Property Name="minutos_retraso" Type="Int32" />
+    <Property Name="justificacion" Type="Boolean" Nullable="false" />
+    <Property Name="observacion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="id_docente" Type="Int32" />
+    <Property Name="id_grupo" Type="Int32" />
+    <NavigationProperty Name="Docentes" Relationship="Self.FK__Asistenci__id_do__5DCAEF64" FromRole="Asistencias" ToRole="Docentes" />
+    <NavigationProperty Name="Grupos" Relationship="Self.FK__Asistenci__id_gr__5EBF139D" FromRole="Asistencias" ToRole="Grupos" />
+  </EntityType>
+  <EntityType Name="Docentes">
+    <Key>
+      <PropertyRef Name="id_docente" />
+    </Key>
+    <Property Name="id_docente" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="apellido" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Asistencias" Relationship="Self.FK__Asistenci__id_do__5DCAEF64" FromRole="Docentes" ToRole="Asistencias" />
+    <NavigationProperty Name="Grupos" Relationship="Self.FK__Grupos__id_docen__5AEE82B9" FromRole="Docentes" ToRole="Grupos" />
+    <NavigationProperty Name="Sueldos" Relationship="Self.FK__Sueldos__id_doce__619B8048" FromRole="Docentes" ToRole="Sueldos" />
+  </EntityType>
+  <EntityType Name="Grupos">
+    <Key>
+      <PropertyRef Name="id_grupo" />
+    </Key>
+    <Property Name="id_grupo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="estudiantes_matriculados" Type="Int32" />
+    <Property Name="turno" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="id_docente" Type="Int32" />
+    <NavigationProperty Name="Asistencias" Relationship="Self.FK__Asistenci__id_gr__5EBF139D" FromRole="Grupos" ToRole="Asistencias" />
+    <NavigationProperty Name="Docentes" Relationship="Self.FK__Grupos__id_docen__5AEE82B9" FromRole="Grupos" ToRole="Docentes" />
+  </EntityType>
+  <EntityType Name="Sueldos">
+    <Key>
+      <PropertyRef Name="id_sueldos" />
+    </Key>
+    <Property Name="id_sueldos" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="id_docente" Type="Int32" Nullable="false" />
+    <Property Name="gestion" Type="Int32" Nullable="false" />
+    <Property Name="mes" Type="Int32" Nullable="false" />
+    <Property Name="haber_basico" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+    <Property Name="descuento" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+    <Property Name="liquido_pagable" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+    <NavigationProperty Name="Docentes" Relationship="Self.FK__Sueldos__id_doce__619B8048" FromRole="Sueldos" ToRole="Docentes" />
+  </EntityType>
+  <EntityType Name="Usuarios">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="usuario" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="password" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="email" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="rol" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <Association Name="FK__Asistenci__id_do__5DCAEF64">
+    <End Role="Docentes" Type="Self.Docentes" Multiplicity="0..1" />
+    <End Role="Asistencias" Type="Self.Asistencias" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Docentes">
+        <PropertyRef Name="id_docente" />
+      </Principal>
+      <Dependent Role="Asistencias">
+        <PropertyRef Name="id_docente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Asistenci__id_gr__5EBF139D">
+    <End Role="Grupos" Type="Self.Grupos" Multiplicity="0..1" />
+    <End Role="Asistencias" Type="Self.Asistencias" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Grupos">
+        <PropertyRef Name="id_grupo" />
+      </Principal>
+      <Dependent Role="Asistencias">
+        <PropertyRef Name="id_grupo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Grupos__id_docen__5AEE82B9">
+    <End Role="Docentes" Type="Self.Docentes" Multiplicity="0..1" />
+    <End Role="Grupos" Type="Self.Grupos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Docentes">
+        <PropertyRef Name="id_docente" />
+      </Principal>
+      <Dependent Role="Grupos">
+        <PropertyRef Name="id_docente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Sueldos__id_doce__619B8048">
+    <End Role="Docentes" Type="Self.Docentes" Multiplicity="1" />
+    <End Role="Sueldos" Type="Self.Sueldos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Docentes">
+        <PropertyRef Name="id_docente" />
+      </Principal>
+      <Dependent Role="Sueldos">
+        <PropertyRef Name="id_docente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ControlAsistenciaEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Asistencias" EntityType="Self.Asistencias" />
+    <EntitySet Name="Docentes" EntityType="Self.Docentes" />
+    <EntitySet Name="Grupos" EntityType="Self.Grupos" />
+    <EntitySet Name="Sueldos" EntityType="Self.Sueldos" />
+    <EntitySet Name="Usuarios" EntityType="Self.Usuarios" />
+    <AssociationSet Name="FK__Asistenci__id_do__5DCAEF64" Association="Self.FK__Asistenci__id_do__5DCAEF64">
+      <End Role="Docentes" EntitySet="Docentes" />
+      <End Role="Asistencias" EntitySet="Asistencias" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Asistenci__id_gr__5EBF139D" Association="Self.FK__Asistenci__id_gr__5EBF139D">
+      <End Role="Grupos" EntitySet="Grupos" />
+      <End Role="Asistencias" EntitySet="Asistencias" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Grupos__id_docen__5AEE82B9" Association="Self.FK__Grupos__id_docen__5AEE82B9">
+      <End Role="Docentes" EntitySet="Docentes" />
+      <End Role="Grupos" EntitySet="Grupos" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Sueldos__id_doce__619B8048" Association="Self.FK__Sueldos__id_doce__619B8048">
+      <End Role="Docentes" EntitySet="Docentes" />
+      <End Role="Sueldos" EntitySet="Sueldos" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
